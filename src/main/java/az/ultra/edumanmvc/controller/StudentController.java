@@ -37,6 +37,14 @@ public class StudentController {
         return "students-list";
     }
 
+    @RequestMapping(value = {"/api/persons"},method = GET)
+    public String getPersonsList(@RequestParam(value = "option", defaultValue = "0") Integer option, Model theModel) {
+
+        List<?> personsList = (option == 1) ? studentService.getPersonsList() : studentService.getStudentPersonList();
+        theModel.addAttribute("listP", personsList);
+        return "persons-list";
+    }
+
     @RequestMapping(value = {"/api/edit/{id}"},method = GET)
     public String showEditForm(@PathVariable Long id, Model theModel) {
         StudentListResponseModel responseModel = studentService.getStudentById(id);
@@ -71,5 +79,7 @@ public class StudentController {
     public String showAddNewForm() {
         return "add-new";
     }
+
+
 
 }

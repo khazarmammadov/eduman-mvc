@@ -59,6 +59,13 @@
         <a href="${pageContext.request.contextPath}/api/add-new" class="add-button">Add New Student</a>
     </div>
 
+    <label for="selectBox">button</label>
+    <select id="selectBox">
+        <option value="option1">All</option>
+        <option value="option2">Student</option>
+
+    </select>
+
 
 <div class="grid-container">
 

@@ -3,6 +3,7 @@ package az.ultra.edumanmvc.service.impl;
 
 import az.ultra.edumanmvc.model.request.StudentListRequestModel;
 import az.ultra.edumanmvc.model.request.StudentSaveRequestModel;
+import az.ultra.edumanmvc.model.response.PersonListResponseModel;
 import az.ultra.edumanmvc.model.response.StudentInfoResponseModel;
 import az.ultra.edumanmvc.model.response.StudentListResponseModel;
 import az.ultra.edumanmvc.service.StudentService;
@@ -71,6 +72,20 @@ public class StudentServiceImpl implements StudentService {
          //       requestModel.getBirthdate().atStartOfDay().format(inputFormatter),
                 requestModel.getCom_person_uniq_id()
         );
+    }
+
+    @Override
+    public List<PersonListResponseModel> getPersonsList() {
+        String sql  = GET_PERSON_LIST.getQuery();
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PersonListResponseModel.class));
+    }
+
+    @Override
+    public List<PersonListResponseModel> getStudentPersonList() {
+        String sql  = GET_STUDENTS.getQuery();
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PersonListResponseModel.class));
     }
 
 
