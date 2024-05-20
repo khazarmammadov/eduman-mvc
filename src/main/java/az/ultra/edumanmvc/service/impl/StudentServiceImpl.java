@@ -12,8 +12,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static az.ultra.edumanmvc.enums.SqlStatements.*;
@@ -27,10 +25,13 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public List<StudentListResponseModel> getStudentsList() {
+    public List<StudentListResponseModel> getStudentsList(Integer start, Integer length, String search) {
         String sql = GET_STUDENT_LIST.getQuery();
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StudentListResponseModel.class));
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StudentListResponseModel.class),
+                search, start, length + start);
     }
+
+
 
     @Override
     public List<StudentInfoResponseModel> getStudentsInfo() {
@@ -86,6 +87,19 @@ public class StudentServiceImpl implements StudentService {
         String sql  = GET_STUDENTS.getQuery();
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PersonListResponseModel.class));
+    }
+
+    @Override
+    public List<StudentListResponseModel> searchStudentList(String str) {
+        String sql = SEARCH_QUERY.getQuery();
+        String searchTerm = "'%" + str.toLowerCase() + "%'";
+        return jdbcTemplate.query(sql.concat(searchTerm) , new BeanPropertyRowMapper<>(StudentListResponseModel.class));
+    }
+
+    @Override
+    public Long countOfStudents(String search) {
+        return jdbcTemplate.queryForObject("select count(*) from EDUMAN_COMMON.TEST_PERSONS_KHAZAR where name like '%' || ? || '%'",
+                Long.class, search);
     }
 
 

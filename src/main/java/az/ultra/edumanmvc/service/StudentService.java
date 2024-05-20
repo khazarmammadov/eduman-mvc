@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface StudentService {
 
-     List<StudentListResponseModel> getStudentsList();
+     List<StudentListResponseModel> getStudentsList(Integer start, Integer length, String search);
 
      List<StudentInfoResponseModel> getStudentsInfo();
 
@@ -25,5 +25,9 @@ public interface StudentService {
 
      List<PersonListResponseModel> getPersonsList();
 
-     public List<PersonListResponseModel> getStudentPersonList();
+     List<PersonListResponseModel> getStudentPersonList();
+
+     List<StudentListResponseModel> searchStudentList(String str);
+
+     Long countOfStudents(String search);
 }

@@ -2,6 +2,7 @@ package az.ultra.edumanmvc.controller;
 
 import az.ultra.edumanmvc.model.request.StudentListRequestModel;
 import az.ultra.edumanmvc.model.request.StudentSaveRequestModel;
+import az.ultra.edumanmvc.model.response.BaseResponse;
 import az.ultra.edumanmvc.model.response.StudentInfoResponseModel;
 import az.ultra.edumanmvc.model.response.StudentListResponseModel;
 import az.ultra.edumanmvc.service.StudentService;
@@ -21,7 +22,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @RequestMapping(value = {"/info"},method = GET)
+    @RequestMapping(value = {"/info"}, method = GET)
     public String getStudentsInfo(Model theModel) {
         List<StudentInfoResponseModel> studentsInfo = studentService.getStudentsInfo();
         theModel.addAttribute("studentsInfo", studentsInfo);
@@ -29,15 +30,15 @@ public class StudentController {
         return "students-info";
     }
 
-    @RequestMapping(value = {"/api/list"},method = GET)
-    public String getStudentsList(Model theModel) {
-        List<StudentListResponseModel> studentsList = studentService.getStudentsList();
-        theModel.addAttribute("studentsList", studentsList);
+//    @RequestMapping(value = {"/api/list"}, method = GET)
+//    public String getStudentsList(Model theModel) {
+//        List<StudentListResponseModel> studentsList = studentService.getStudentsList(start, length, search);
+//        theModel.addAttribute("studentsList", studentsList);
+//
+//        return "students-list";
+//    }
 
-        return "students-list";
-    }
-
-    @RequestMapping(value = {"/api/persons"},method = GET)
+    @RequestMapping(value = {"/api/persons"}, method = GET)
     public String getPersonsList(@RequestParam(value = "option", defaultValue = "0") Integer option, Model theModel) {
 
         List<?> personsList = (option == 1) ? studentService.getPersonsList() : studentService.getStudentPersonList();
@@ -45,7 +46,7 @@ public class StudentController {
         return "persons-list";
     }
 
-    @RequestMapping(value = {"/api/edit/{id}"},method = GET)
+    @RequestMapping(value = {"/api/edit/{id}"}, method = GET)
     public String showEditForm(@PathVariable Long id, Model theModel) {
         StudentListResponseModel responseModel = studentService.getStudentById(id);
         System.out.println(">> responseModel = " + responseModel);
@@ -54,14 +55,15 @@ public class StudentController {
         return "edit-student";
     }
 
-    @RequestMapping(value = {"/api/update"},method = POST)
-    public String updateStudent(StudentListRequestModel requestModel) {
-        System.out.println(">> " + requestModel);
+    @RequestMapping(value = {"/api/update"}, method = POST)
+    @ResponseBody
+    public String updateStudent(@RequestBody StudentListRequestModel requestModel) {
+        System.out.println(">> requestModel = " + requestModel);
         studentService.updateStudent(requestModel);
-        return "redirect:/api/list";
+        return "ok";
     }
 
-    @RequestMapping(value = {"/api/delete"},method = POST)
+    @RequestMapping(value = {"/api/delete"}, method = POST)
     public String deleteStudent(Long id) {
 
         studentService.deleteStudent(id);
@@ -78,6 +80,37 @@ public class StudentController {
     @RequestMapping(value = {"/api/add-new"}, method = GET)
     public String showAddNewForm() {
         return "add-new";
+    }
+
+    @RequestMapping(value = {"/api/search"}, method = GET)
+    @ResponseBody
+    public List<StudentListResponseModel> searchStudent(@RequestParam(value = "search", defaultValue = "") String str) {
+        return studentService.searchStudentList(str);
+    }
+
+    @RequestMapping(value = {"/api/tPerson"}, method = GET)
+    @ResponseBody
+    public BaseResponse<List<StudentListResponseModel>> getPersons(
+            @RequestParam("draw") Integer draw,
+            @RequestParam(value = "start", defaultValue = "0") Integer start,
+            @RequestParam(value = "length", defaultValue = "10") Integer length,
+            @RequestParam(value = "search[value]", defaultValue = "") String search) {
+        System.out.println(">> search: " + search);
+
+        List<StudentListResponseModel> studentsList = studentService.getStudentsList(start, length, search);
+        Long studentsCount = studentService.countOfStudents(search);
+
+        return BaseResponse.<List<StudentListResponseModel>>builder()
+                .data(studentsList)
+                .draw(draw)
+                .recordsFiltered(studentsCount)
+                .recordsTotal(studentsCount)
+                .build();
+    }
+
+    @RequestMapping(value = {"/api/pp"}, method = GET)
+    public String getPersonJSP() {
+        return "persons-table";
     }
 
 

@@ -9,6 +9,13 @@
             text-align: center;
         }
 
+        .select-box {
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: right;
+        }
+
 
         .container {
             max-width: 850px;
@@ -48,64 +55,43 @@
             text-align: center;
         }
 
+        .search-container {
+
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
 
     <h2>Student List</h2>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for students..." onclick=""/>
+    </div>
+
 
     <div class="add-button-container">
         <a href="${pageContext.request.contextPath}/api/add-new" class="add-button">Add New Student</a>
     </div>
 
-    <label for="selectBox">button</label>
-    <select id="selectBox">
-        <option value="option1">All</option>
-        <option value="option2">Student</option>
+    <div class="select-box">
+        <select id="selectBox">
+            <option value="option1">All</option>
+            <option value="option2">Student</option>
 
-    </select>
+        </select></div>
 
 
-<div class="grid-container">
-
-    <div class="grid-column">
-        <div class="grid-item">ID</div>
-    </div>
-    <div class="grid-column">
-        <div class="grid-item">Name</div>
-    </div>
-    <div class="grid-column">
-        <div class="grid-item">Surname</div>
-    </div>
-    <div class="grid-column">
-        <div class="grid-item">MiddleName</div>
-    </div>
-    <div class="grid-column">
-        <div class="grid-item">Edit</div>
+    <div id="usersList" class="grid-container">
     </div>
 
-    <c:forEach var="student" items="${studentsList}">
-        <div class="grid-column">
-            <div class="grid-item">${student.id}</div>
-        </div>
-        <div class="grid-column">
-            <div class="grid-item">${student.name}</div>
-        </div>
-        <div class="grid-column">
-            <div class="grid-item">${student.surname}</div>
-        </div>
-        <div class="grid-column">
-            <div class="grid-item">${student.middleName}</div>
-        </div>
-        <div class="grid-column">
-            <div class="grid-item">
-                <a href="${pageContext.request.contextPath}/api/edit/${student.id}">Edit</a>
-            </div>
-        </div>
-
-    </c:forEach>
 </div>
-    </div>
+
+<script src = '/users.js'></script>
 </body>
 </html>
