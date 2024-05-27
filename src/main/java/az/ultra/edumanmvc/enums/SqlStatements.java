@@ -22,7 +22,7 @@ public enum SqlStatements {
                 FROM
                     EDUMAN_COMMON.TEST_PERSONS_KHAZAR TPK
                 WHERE
-                    TPK.NAME LIKE '%' || ? || '%'
+                    LOWER(TPK.NAME) LIKE '%' || ? || '%'
             ) numbered_rows
             WHERE
                 row_num > ? AND row_num <= ?

@@ -30,4 +30,6 @@ public interface StudentService {
      List<StudentListResponseModel> searchStudentList(String str);
 
      Long countOfStudents(String search);
+
+     void insertStudent(StudentSaveRequestModel requestModel);
 }

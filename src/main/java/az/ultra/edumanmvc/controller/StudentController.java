@@ -8,10 +8,18 @@ import az.ultra.edumanmvc.model.response.StudentListResponseModel;
 import az.ultra.edumanmvc.service.StudentService;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -63,18 +71,36 @@ public class StudentController {
         return "ok";
     }
 
-    @RequestMapping(value = {"/api/delete"}, method = POST)
-    public String deleteStudent(Long id) {
+//    @RequestMapping(value = {"/api/delete"}, method = POST)
+//    public String deleteStudent(Long id) {
+//
+//        studentService.deleteStudent(id);
+//        return "redirect:/api/list";
+//    }
+
+
+    @RequestMapping(value = {"/api/delete/{id}"}, method = DELETE)
+    @ResponseBody
+    public String deleteStudent(@PathVariable Long id) {
 
         studentService.deleteStudent(id);
-        return "redirect:/api/list";
+        return "ok";
     }
+
 
     @RequestMapping(value = {"/api/save"}, method = POST)
     public String saveStudent(StudentSaveRequestModel requestModel) {
         studentService.saveStudent(requestModel);
         System.out.println(">> " + requestModel);
         return "redirect:/api/list";
+    }
+
+    @RequestMapping(value = {"/api/insert"}, method = POST)
+    @ResponseBody
+    public void insertStudent(@RequestBody StudentSaveRequestModel requestModel) {
+        studentService.insertStudent(requestModel);
+        System.out.println(">> " + requestModel);
+      //  return "redirect:/api/list";
     }
 
     @RequestMapping(value = {"/api/add-new"}, method = GET)
@@ -113,6 +139,54 @@ public class StudentController {
         return "persons-table";
     }
 
+    @GetMapping("/download/excel")
+    @ResponseBody
+    public void personsExcel(@RequestParam(value = "draw", defaultValue = "0") Integer draw,
+                             @RequestParam(value = "start", defaultValue = "0") Integer start,
+                             @RequestParam(value = "length", defaultValue = "10") Integer length,
+                             @RequestParam(value = "search[value]", defaultValue = "") String search,
+                             HttpServletResponse response) {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=persons.xlsx");
+        response.setStatus(HttpStatus.OK.value());
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Students");
+
+            XSSFRow headerRow = sheet.createRow(0);
+            String[] headers = {"ID", "Name", "Surname", "MiddleName"};
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            headerStyle.setFont(font);
+
+            for (int i = 0; i < headers.length; i++) {
+                headerRow.createCell(i).setCellValue(headers[i]);
+                headerRow.getCell(i).setCellStyle(headerStyle);
+            }
+
+            List<StudentListResponseModel> studentsList = studentService.getStudentsList(start, length, search);
+
+            int rowNum = 1;
+            for (StudentListResponseModel student : studentsList) {
+                XSSFRow row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(student.getId());
+                row.createCell(1).setCellValue(student.getName());
+                row.createCell(2).setCellValue(student.getSurname());
+                row.createCell(3).setCellValue(student.getMiddleName());
+            }
+
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(response.getOutputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

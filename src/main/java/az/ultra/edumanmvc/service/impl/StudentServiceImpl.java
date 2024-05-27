@@ -1,11 +1,13 @@
 package az.ultra.edumanmvc.service.impl;
 
 
+import az.ultra.edumanmvc.entity.Student;
 import az.ultra.edumanmvc.model.request.StudentListRequestModel;
 import az.ultra.edumanmvc.model.request.StudentSaveRequestModel;
 import az.ultra.edumanmvc.model.response.PersonListResponseModel;
 import az.ultra.edumanmvc.model.response.StudentInfoResponseModel;
 import az.ultra.edumanmvc.model.response.StudentListResponseModel;
+import az.ultra.edumanmvc.repository.StudentRepository;
 import az.ultra.edumanmvc.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -22,6 +24,7 @@ import static az.ultra.edumanmvc.enums.SqlStatements.*;
 public class StudentServiceImpl implements StudentService {
 
     private final JdbcTemplate jdbcTemplate;
+    private final StudentRepository studentRepository;
 
 
     @Override
@@ -30,7 +33,6 @@ public class StudentServiceImpl implements StudentService {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StudentListResponseModel.class),
                 search, start, length + start);
     }
-
 
 
     @Override
@@ -70,21 +72,21 @@ public class StudentServiceImpl implements StudentService {
                 requestModel.getSurname(),
                 requestModel.getMiddleName(),
                 requestModel.getSex(),
-         //       requestModel.getBirthdate().atStartOfDay().format(inputFormatter),
+                //       requestModel.getBirthdate().atStartOfDay().format(inputFormatter),
                 requestModel.getCom_person_uniq_id()
         );
     }
 
     @Override
     public List<PersonListResponseModel> getPersonsList() {
-        String sql  = GET_PERSON_LIST.getQuery();
+        String sql = GET_PERSON_LIST.getQuery();
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PersonListResponseModel.class));
     }
 
     @Override
     public List<PersonListResponseModel> getStudentPersonList() {
-        String sql  = GET_STUDENTS.getQuery();
+        String sql = GET_STUDENTS.getQuery();
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PersonListResponseModel.class));
     }
@@ -93,13 +95,26 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentListResponseModel> searchStudentList(String str) {
         String sql = SEARCH_QUERY.getQuery();
         String searchTerm = "'%" + str.toLowerCase() + "%'";
-        return jdbcTemplate.query(sql.concat(searchTerm) , new BeanPropertyRowMapper<>(StudentListResponseModel.class));
+        return jdbcTemplate.query(sql.concat(searchTerm), new BeanPropertyRowMapper<>(StudentListResponseModel.class));
     }
 
     @Override
     public Long countOfStudents(String search) {
         return jdbcTemplate.queryForObject("select count(*) from EDUMAN_COMMON.TEST_PERSONS_KHAZAR where name like '%' || ? || '%'",
                 Long.class, search);
+    }
+
+    @Override
+    public void insertStudent(StudentSaveRequestModel requestModel) {
+
+        Student student = Student.builder()
+                .id(requestModel.getId())
+                .name(requestModel.getName())
+                .surname(requestModel.getSurname())
+                .middleName(requestModel.getMiddleName()).build();
+
+        studentRepository.save(student);
+
     }
 
 

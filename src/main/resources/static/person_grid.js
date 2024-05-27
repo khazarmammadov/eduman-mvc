@@ -53,20 +53,91 @@ $(document).ready(function () {
             {
                 "data": "Action",
                 "className": "center",
-                "defaultContent": '<button class="editBtn">Edit</button>'
+                "defaultContent": '<button style="margin-right:10px"  class="editBtn">Edit</button>' +
+                                  '<button class="deleteBtn">Delete</button>'
             }
         ],
         "processing": true,
-        "serverSide": true
+        "serverSide": true,
+        // "layout": {
+        //     "topStart": {
+        //         "buttons": ['copy', 'csv', 'excel', 'pdf', 'print']
+        //     }
+        // }
+
+        "layout": {
+            "topStart": {
+                "buttons": [
+                    'pageLength',
+                    {
+                        "extend": 'colvis',
+                        "title": "Columns visibility"
+                    },
+                    {
+                        extend: 'collection',
+                        className: 'custom-html-collection',
+                        buttons: [
+                            '<h3>Export to file</h3>',
+                            {
+                                "extend": 'pdf',
+                                "title": "Persons-pdf",
+                                "exportOptions": {
+                                    "columns": [0, 1, 2, 3]
+                                },
+                            },
+                            'csv',
+                            {
+                                "extend": 'excel',
+                                "title": "Persons-xls",
+                                "exportOptions": {
+                                    "columns": [0, 1, 2, 3]
+                                },
+                                "messageTop": function() {
+                                    return 'This is a message top comes by me!';
+                                },
+                                "messageBottom": null
+                            },
+                            'print',
+                            {
+                                "text": "Reload",
+                                "action": function(e, dt, node, config) {
+                                    dt.ajax.reload();
+                                }
+                            }
+
+                        ]
+                    },
+                    {
+                        "text": "Download",
+                        "action": function(e, dt, node, config) {
+                            var len = dt.page.len();
+                            var start = dt.page.info().start;
+                            window.open('http://localhost:8080/download/excel?draw=1&length=' + len + "&start=" + start);
+                        }
+                    }
+                ]
+            }
+        }
     });
 
    // var modal = document.getElementById("myModal");
 
     var span = document.getElementsByClassName("close")[0];
 
-    span.onclick = function () {
-        $('#myModal').style.display = "none";
-    }
+
+
+
+    $(window).click(function(event) {
+        if ($(event.target).is("#myModal")) {
+            $("#myModal").css("display", "none");
+        }
+    });
+
+    $(".close").click(function() {
+        $("#myModal").css("display", "none");
+    });
+
+
 
     window.onclick = function (event) {
         if (event.target == $('#myModal')) {
@@ -118,4 +189,27 @@ $(document).ready(function () {
         });
 
     }
+
+    $('#example tbody').on('click', 'button.deleteBtn', function () {
+        console.log('..............');
+        var data = table.row($(this).parents('tr')).data();
+        var id = data.id;
+
+        if (confirm('Are you sure you want to delete this person?')) {
+            $.ajax({
+                url: '/api/delete/' + id,
+                type: 'DELETE',
+                success: function (result) {
+                    toastr.success('Person deleted: ' + id, 'Successful delete operation');
+                    table.ajax.reload();
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Unable to delete person: ' + id, 'Unsuccessful delete operation');
+                }
+            });
+        }
+    });
+
+
+
 });

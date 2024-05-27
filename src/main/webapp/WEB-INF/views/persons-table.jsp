@@ -15,66 +15,125 @@
     <title>Data Table Example</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 
+<%--    <style>--%>
+<%--        /* The Modal (background) */--%>
+<%--        .modal {--%>
+<%--            display: none;--%>
+<%--            position: fixed;--%>
+<%--            z-index: 1;--%>
+<%--            left: 0;--%>
+<%--            top: 0;--%>
+<%--            width: 100%;--%>
+<%--            height: 100%;--%>
+<%--            overflow: auto;--%>
+<%--            background-color: rgb(0,0,0);--%>
+<%--            background-color: rgba(0,0,0,0.4);--%>
+<%--            padding-top: 60px;--%>
+<%--        }--%>
+
+<%--        /* Modal Content */--%>
+<%--        .modal-content {--%>
+<%--            background-color: #fefefe;--%>
+<%--            margin: 5% auto;--%>
+<%--            padding: 20px;--%>
+<%--            border: 1px solid #888;--%>
+<%--            width: 80%;--%>
+<%--            max-width: 500px;--%>
+<%--        }--%>
+
+<%--        /* The Close Button */--%>
+<%--        .close {--%>
+<%--            color: #aaa;--%>
+<%--            float: right;--%>
+<%--            font-size: 28px;--%>
+<%--            font-weight: bold;--%>
+<%--        }--%>
+
+<%--        .close:hover,--%>
+<%--        .close:focus {--%>
+<%--            color: black;--%>
+<%--            text-decoration: none;--%>
+<%--            cursor: pointer;--%>
+<%--        }--%>
+
+<%--        form label {--%>
+<%--            display: block;--%>
+<%--            margin-top: 10px;--%>
+<%--        }--%>
+
+<%--        form input {--%>
+<%--            width: 100%;--%>
+<%--            padding: 10px;--%>
+<%--            margin-top: 5px;--%>
+<%--        }--%>
+
+<%--        form button {--%>
+<%--            margin-top: 20px;--%>
+<%--            padding: 10px 20px;--%>
+<%--            font-size: 16px;--%>
+<%--        }--%>
+<%--    </style>--%>
     <style>
-        /* The Modal (background) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
+    /* The Modal (background) */
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+    }
 
-        /* Modal Content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
+    /* Modal Content */
+    .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    }
 
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+    /* The Close Button */
+    .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    .close:hover,
+    .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    }
 
-        form label {
-            display: block;
-            margin-top: 10px;
-        }
+    form label {
+    display: block;
+    margin-top: 10px;
+    }
 
-        form input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-        }
+    form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    }
 
-        form button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-    </style>
+    form button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    }
+</style>
 </head>
 <body>
+
 <table id="example" class="display" style="width:100%">
     <thead>
     <tr>
@@ -112,7 +171,41 @@
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 <script src="/person_grid.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<%--<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>--%>
+<%--<script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>--%>
+<%--<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>--%>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>--%>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>--%>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>--%>
+<%--<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>--%>
+<%--<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>--%>
+
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+<link href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
+<link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<%--    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>--%>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
 </body>
 </html>
 
