@@ -114,7 +114,15 @@ $(document).ready(function () {
                             var start = dt.page.info().start;
                             window.open('http://localhost:8080/download/excel?draw=1&length=' + len + "&start=" + start);
                         }
+                    },{
+                        "text": "Add",
+                        "action": function (e,dt, node, config) {
+                            $('#myAddModal').show()
+
+                        }
+
                     }
+
                 ]
             }
         }
@@ -124,8 +132,41 @@ $(document).ready(function () {
 
     var span = document.getElementsByClassName("close")[0];
 
+    document.getElementById("addForm").onsubmit = function (event) {
+        event.preventDefault();
+        // Get form values
+        var studentId = document.getElementById("addStudentId").value;
+        var firstName = document.getElementById("addFirstName").value;
+        var middleName = document.getElementById("addMiddleName").value;
+        var surname = document.getElementById("addSurname").value;
 
+        //  console.log(`ID: ${studentId}, First Name: ${firstName}, Middle Name: ${middleName}, Surname: ${surname}`);
 
+        var person = {
+            id: studentId,
+            name: firstName,
+            surname: surname,
+            middleName: middleName
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/api/insert',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(person),
+            success: function (result) {
+                toastr.success('Person created: ' + studentId, 'Successful add operation');
+                table.ajax.reload();
+                $('#addForm')[0].reset();
+                $('#myAddModal').hide();
+                // $('#myModal').style.display = "none";
+            },
+            error: function (xhr, status, error) {
+                toastr.error('exception', 'Unsuccessful add operation');
+            }
+        });
+
+    }
 
     $(window).click(function(event) {
         if ($(event.target).is("#myModal")) {
@@ -144,6 +185,48 @@ $(document).ready(function () {
             $('#myModal').style.display = "none";
         }
     }
+
+
+
+
+
+
+
+
+    $(window).click(function(event) {
+        if ($(event.target).is("#myAddModal")) {
+            $("#myAddModal").css("display", "none");
+        }
+    });
+
+    $(".close").click(function() {
+        $("#myAddModal").css("display", "none");
+    });
+
+
+
+    window.onclick = function (event) {
+        if (event.target == $('#myAddModal')) {
+            $('#myAddModal').style.display = "none";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     $('#example tbody').on('click', 'button.editBtn', function () {
         var data = table.row($(this).parents('tr')).data();
@@ -177,14 +260,14 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(person),
             success: function (result) {
-                toastr.success('Person created: ' + studentId, 'Successful add operation');
+                toastr.success('Person edited: ' + studentId, 'Successful edit operation');
                 table.ajax.reload();
                 $('#editForm')[0].reset();
                 $('#myModal').hide();
                 // $('#myModal').style.display = "none";
             },
             error: function (xhr, status, error) {
-                toastr.error('exception', 'Unsuccessful add operation');
+                toastr.error('exception', 'Unsuccessful edit operation');
             }
         });
 

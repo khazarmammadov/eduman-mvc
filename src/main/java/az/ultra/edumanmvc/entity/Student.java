@@ -1,6 +1,7 @@
 package az.ultra.edumanmvc.entity;
 
 
+import az.ultra.edumanmvc.model.request.StudentSaveRequestModel;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -22,6 +23,13 @@ public class Student {
     private String name;
     private String surname;
     private String middleName;
+
+//    public static Student ofStudentGet(StudentSaveRequestModel model){
+//        return Student.builder()
+//                .surname(model.getSurname())
+//                .build();
+//    }
+
 //    private Long sex;
 //    private LocalDate birthDate;
 //    private Long comPersonUniqId;

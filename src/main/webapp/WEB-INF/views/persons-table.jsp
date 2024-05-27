@@ -167,6 +167,25 @@
     </div>
 </div>
 
+<!-- The Add Modal -->
+<div id="myAddModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Student</h2>
+        <form id="addForm">
+            <label for="studentId">Student ID:</label>
+            <input type="text" id="addStudentId" name="studentId" required><br><br>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="addFirstName" name="firstName" required><br><br>
+            <label for="middleName">Middle Name:</label>
+            <input type="text" id="addMiddleName" name="middleName" required><br><br>
+            <label for="surname">Surname:</label>
+            <input type="text" id="addSurname" name="surname" required><br><br>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 <script src="/person_grid.js"></script>
